@@ -6,6 +6,8 @@ This is our project repository for CVPR 2020 workshop.
 
 ## Network Architecture
 ![architecture](./figure/architecture.png)
+Obtained R(x) and L(x) are used to make output(clear image) like following:
+![formula](./figure/formula.png)
 
 ## Dataset Preparation
 You can download **NTIRE 2020 NonHomogeneous Dehazing Challenge** dataset after participating the challenge in the following link:
