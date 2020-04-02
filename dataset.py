@@ -8,8 +8,7 @@ import torch
 
 
 class DehazeList(torch.utils.data.Dataset):
-    def __init__(self, data_dir, phase, transforms, list_dir=None, out_name=False):
-        self.list_dir = data_dir if list_dir is None else list_dir
+    def __init__(self, data_dir, phase, transforms, out_name=False):
         self.data_dir = data_dir
         self.phase = phase
         self.transforms = transforms

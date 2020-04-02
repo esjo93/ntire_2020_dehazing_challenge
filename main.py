@@ -30,9 +30,6 @@ def parse_args():
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('cmd', choices=['train', 'test']) #
     parser.add_argument('-d', '--data-dir', default=None, required=True) #
-    parser.add_argument('-l', '--list-dir', default=None, #
-                        help='List dir to look for train_images.txt etc. ' #
-                             'It is the same with --data-dir if not set.') #
     parser.add_argument('-s', '--crop-size', default=0, type=int) #
     parser.add_argument('--step', type=int, default=200) #
     parser.add_argument('--batch-size', type=int, default=64, metavar='N', #
@@ -42,22 +39,14 @@ def parse_args():
     parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
                         help='learning rate (default: 0.01)') #
     parser.add_argument('--lr-mode', type=str, default='step') #
-    parser.add_argument('--momentum', type=float, default=0.9, metavar='M',
-                        help='SGD momentum (default: 0.9)') #
     parser.add_argument('--weight-decay', '--wd', default=1e-4, type=float, #
                         metavar='W', help='weight decay (default: 1e-4)') #
-    parser.add_argument('-e', '--evaluate', dest='evaluate',
-                        action='store_true',
-                        help='evaluate model on validation set')
     parser.add_argument('--resume', default='', type=str, metavar='PATH', #
                         help='path to latest checkpoint of model (default: none)') #
     parser.add_argument('-j', '--workers', type=int, default=8) #
     parser.add_argument('--phase', default='val') #
     parser.add_argument('--random-scale', default=0, type=float)
     parser.add_argument('--random-rotate', default=0, type=int)
-    parser.add_argument('--bn-sync', action='store_true') #
-    parser.add_argument('--with-gt', action='store_true')
-    parser.add_argument('--test-suffix', default='', type=str)
     args = parser.parse_args()
 
     print(' '.join(sys.argv))

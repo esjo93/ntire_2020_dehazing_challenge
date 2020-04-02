@@ -63,7 +63,7 @@ def test_dehaze(args, logger=None):
     dataset = DehazeList(data_dir, phase, transforms.Compose([
         transforms.ToTensor(),
         #normalize,
-        ]), list_dir=args.list_dir, out_name=True)
+        ]), out_name=True)
 
     test_loader = torch.utils.data.DataLoader(
         dataset,

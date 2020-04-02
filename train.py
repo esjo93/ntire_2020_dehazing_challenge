@@ -165,14 +165,16 @@ def train_dehaze(args, saveDirName='.', logger=None):
     data_dir = args.data_dir
 
     t = []
+
     if args.random_scale > 0:
         t.append(transforms.RandomScale(args.random_scale))
+
     t.append(transforms.RandomCrop(crop_size))
+
     if args.random_rotate > 0:
         t.append(transforms.RandomRotate(args.random_rotate))
     t.extend([transforms.RandomHorizontalFlip(),
               transforms.RandomVerticalFlip(),
-            #   transforms.AddNoise(),
               transforms.RandomIdentityMapping(p=0.4),
               transforms.ToTensor(),
     ])
@@ -180,23 +182,19 @@ def train_dehaze(args, saveDirName='.', logger=None):
 
     # DataLoaders for training/validation dataset
     train_loader = torch.utils.data.DataLoader(
-        DehazeList(data_dir, 'train', transforms.Compose(t),
-                list_dir=args.list_dir, out_name=False),
+        DehazeList(data_dir, 'train', transforms.Compose(t), out_name=False),
         batch_size=batch_size, shuffle=True, num_workers=num_workers,
         pin_memory=True, drop_last=True
     )
 
     val_loader = torch.utils.data.DataLoader(
         DehazeList(data_dir, 'val', transforms.Compose([
-            transforms.ToTensor(),
-        ]), list_dir=args.list_dir, out_name=True),
+            transforms.ToTensor(),]), out_name=True),
         batch_size=batch_size, shuffle=False, num_workers=num_workers,
         pin_memory=False, drop_last=False
     )
 
     # define loss function (criterion) and optimizer
-    
-    
     optimizer = torch.optim.Adam(net.parameters(),
                                 args.lr,
                                 betas=(0.5, 0.999),
@@ -219,10 +217,6 @@ def train_dehaze(args, saveDirName='.', logger=None):
         else:
             print("=> no checkpoint found at '{}'".format(args.resume))
     
-    if args.evaluate:
-        validate(val_loader, model, criterion, eval_score=psnr, logger=logger)
-        return
-
     lr = args.lr
     for epoch in range(start_epoch, args.epochs):
         lr = adjust_learning_rate(args, optimizer, epoch, lr)
@@ -242,7 +236,7 @@ def train_dehaze(args, saveDirName='.', logger=None):
         if epoch == 0:
             best_psnr1 = psnr1
 
-        is_best = psnr1 >= best_psnr1
+        is_best = (psnr1 >= best_psnr1)
         best_psnr1 = max(psnr1, best_psnr1)
         
         checkpoint_path = saveDirName + '/'  + 'checkpoint_latest.pth.tar'
